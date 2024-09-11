@@ -39,24 +39,57 @@ export class AuthsService {
     try {
         const response = await axios.post(url, data, options);
         console.log(response.data);
+        this.getPartnerToken();
         return response.data;
     } catch (error) {
         // console.error('Error fetching token:', error);
     }
   }
 
-  async getProfile(access_token: string) {
-    const url = 'https://api.trello.com/1/members/me/';
+  async getPartnerToken() {
+    const url = 'https://auth.tesla.com/oauth2/v3/token';
+    const client_id = this.configService.get('TESLA_CLIENT_ID');
+    const client_secret = this.configService.get('TESLA_CLIENT_SECRET');
+    const scope = this.configService.get('TESLA_SCOPE');
 
-    const api_key = this.configService.get('TRELLO_API_KEY');
-    const params = {
-      key: api_key,
-      token: access_token
+    const data = {
+      grant_type: 'client_credentials',
+      client_id: client_id,
+      client_secret: client_secret,
+      audience: 'https://fleet-api.prd.na.vn.cloud.tesla.com',
+      scope: scope, 
     };
     
-    // const response = await fetch(`${url}?key=${api_key}&token=${access_token}`);
+    const options = {
+      headers: { 'Content-Type': 'application/json' },
+    };
 
-    // const data = await response.json();
-    // return data;
+    try {
+      const response = await axios.post(url, data, options);
+      const access_token = response.data.access_token;
+      this.register(access_token);
+    } catch(error) {
+
+    }
+  }
+
+  async register (access_token: string) {
+    const data = {
+      "domain": "http://localhost:3000",
+    };
+    const url = 'https://fleet-api.prd.na.vn.cloud.tesla.com/api/1/partner_accounts'
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`,
+      }
+    };
+    try {
+      const response = await axios.post(url, data, options);
+      const public_key = response.data.public_key;
+      console.log("domain: ", public_key);
+    } catch(error) {
+
+    }
   }
 }
