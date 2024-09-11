@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
+import axios from 'axios';
 
 @Injectable()
 export class AuthsService {
@@ -30,18 +31,18 @@ export class AuthsService {
       audience: 'https://fleet-api.prd.na.vn.cloud.tesla.com',
       redirect_uri: redirect_url
     };
+    console.log("code: ", code);
 
     const options = {
-      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
     };
-
-    const response = await fetch(url, options);
-
-    const json = await response.json();
-
-    return json;
+    try {
+        const response = await axios.post(url, data, options);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        // console.error('Error fetching token:', error);
+    }
   }
 
   async getProfile(access_token: string) {
@@ -53,9 +54,9 @@ export class AuthsService {
       token: access_token
     };
     
-    const response = await fetch(`${url}?key=${api_key}&token=${access_token}`);
+    // const response = await fetch(`${url}?key=${api_key}&token=${access_token}`);
 
-    const data = await response.json();
-    return data;
+    // const data = await response.json();
+    // return data;
   }
 }

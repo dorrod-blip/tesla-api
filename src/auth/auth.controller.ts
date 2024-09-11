@@ -5,8 +5,9 @@ import { Controller, Get, UseGuards, Req, Res } from '@nestjs/common';
 export class AuthController {
   constructor(private readonly authService: AuthsService) {}
 
-  @Get('/') 
+  @Get('/tesla') 
   login(@Res() res) {
+    console.log("hello");
     res.redirect(this.authService.getQueryParams());
   }
 
@@ -16,7 +17,7 @@ export class AuthController {
       const data = await this.authService.requestAuthorize(req.query.code);
       return data;
     } catch (error) {
-      console.log(error);
+    //   console.log(error);
       return error;
     }
   }
