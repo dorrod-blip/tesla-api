@@ -1,0 +1,16 @@
+{
+    "version": 2,
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/main.ts"
+      }
+    ],
+    "functions": {
+      "main.ts": {
+        "memory": 1024,
+        "maxDuration": 10
+      }
+    }
+  }
+  
