@@ -10,7 +10,4 @@ export class AppController {
     console.log("world");
     return this.appService.getHello();
   }
-  getPublicKey(): string {
-    return this.appService.getKey();
-  }
 }
