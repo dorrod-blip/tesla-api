@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-// import fetch from 'node-fetch';
 import axios from 'axios';
 
 @Injectable()
@@ -75,7 +74,7 @@ export class AuthsService {
 
   async register (access_token: string) {
     const data = {
-      "domain": "http://localhost:3000",
+      "domain": this.configService.get("DOMAIN"),
     };
     const url = 'https://fleet-api.prd.na.vn.cloud.tesla.com/api/1/partner_accounts'
     const options = {
