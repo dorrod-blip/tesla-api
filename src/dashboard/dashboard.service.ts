@@ -60,7 +60,7 @@ export class DashboardService {
   }
 
   async setLock(req: any) {
-    const url = `${this.baseUrl}/api/1/vehicles/${req.query.id}/command/door_lock`;
+    const url = `${this.baseUrl}/api/1/vehicles/${req.query.vin}/command/door_lock`;
     const access_token = req.query.access_token;
     
     try {
@@ -73,7 +73,7 @@ export class DashboardService {
   
       const response = await axios.get(url, options);
       console.log(response.data);
-      return response.data.response;
+      return response.data.response.result;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -98,7 +98,7 @@ export class DashboardService {
   }
 
   async setUnlock(req: any) {
-    const url = `${this.baseUrl}/api/1/vehicles/${req.query.id}/command/door_unlock`;
+    const url = `${this.baseUrl}/api/1/vehicles/${req.query.vin}/command/door_unlock`;
     const access_token = req.query.access_token;
     
     try {
@@ -111,7 +111,7 @@ export class DashboardService {
   
       const response = await axios.get(url, options);
       console.log(response.data);
-      return response.data.response;
+      return response.data.response.result;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
