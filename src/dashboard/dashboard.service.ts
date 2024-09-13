@@ -71,7 +71,7 @@ export class DashboardService {
         },
       };
   
-      const response = await axios.get(url, options);
+      const response = await axios.post(url, null, options);
       console.log(response.data);
       return response.data.response;
     } catch (error) {
@@ -109,7 +109,7 @@ export class DashboardService {
         },
       };
   
-      const response = await axios.get(url, options);
+      const response = await axios.post(url, null, options);
       console.log(response.data);
       return response.data.response;
     } catch (error) {
