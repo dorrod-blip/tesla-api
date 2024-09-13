@@ -18,27 +18,23 @@ export class DashboardService {
         };
     
         const response = await axios.get(url, options);
-        console.log(response.data);
-        return response.data;
+        const data = [];
+        response.data.response?.map((item: any) => {
+          const temp = {
+            id: item.id,
+            vin: item.vin,
+          }
+          data.push(temp);
+        });
+        console.log("vins data: ", data);
+        return data;
       } catch (error) {
         console.error("Error fetching data:", error);
       }
-
-      // const response = await fetch(url);
-      // const json = await response.json();
-      // const data = [];
-      // json?.map((item: any, index: number) => {
-      //     const temp ={
-      //       id: item.id,
-      //       name: item.displayName,
-      //       members: item.membersCount,
-      //     }
-      //     data.push(temp);
-      // })
   }
 
   async getVehicle(req: any) {
-    const url = `${this.baseUrl}/api/1/vehicles/${req.query.id}`;
+    const url = `${this.baseUrl}/api/1/vehicles/${req.query.id}/vehicle_data?endpoints=vehicle_state`;
     const access_token = req.query.access_token;
     
     try {
@@ -50,8 +46,14 @@ export class DashboardService {
       };
   
       const response = await axios.get(url, options);
-      console.log(response.data);
-      return response.data;
+      const item = response.data.response;
+      const data = {
+        id: item.id,
+        vin: item.vin,
+        isLocked: item.vehicle_state.locked,
+      }
+      console.log("vehicle data: ", data);
+      return data;
     } catch (error) {
       console.error("Error fetching data:", error);
     }

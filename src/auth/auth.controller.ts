@@ -22,14 +22,15 @@ export class AuthController {
     }
   }
 
-//   @Get('/register')
-//   // @UseGuards(JwtAuthGuard)
-//   async profile(@Req() req) {
-//     try {
-//       return this.authService.register(req.query.access_token);
-//     } catch (error) {
-//       console.log(error);
-//       return error;
-//     }
-//   }
+  @Get('/register')
+  // @UseGuards(JwtAuthGuard)
+  async register(@Req() req) {
+    try {
+      const data = await this.authService.getPartnerToken();
+      return data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
 }

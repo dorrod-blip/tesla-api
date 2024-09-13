@@ -38,7 +38,7 @@ export class AuthsService {
     try {
         const response = await axios.post(url, data, options);
         console.log(response.data);
-        this.getPartnerToken();
+        // this.getPartnerToken();
         return response.data;
     } catch (error) {
         // console.error('Error fetching token:', error);
@@ -86,7 +86,11 @@ export class AuthsService {
     try {
       const response = await axios.post(url, data, options);
       const public_key = response.data.public_key;
-      console.log("domain: ", public_key);
+      console.log("domain: ", response.data);
+      const key = {
+        'public_key': public_key,
+      }
+      return key;
     } catch(error) {
 
     }
