@@ -73,7 +73,7 @@ export class DashboardService {
   
       const response = await axios.get(url, options);
       console.log(response.data);
-      return response.data.response.result;
+      return response.data.response;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -111,7 +111,7 @@ export class DashboardService {
   
       const response = await axios.get(url, options);
       console.log(response.data);
-      return response.data.response.result;
+      return response.data.response;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
