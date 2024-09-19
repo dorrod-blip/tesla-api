@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import * as fs from 'fs';
+import * as https from 'https';
 
 @Injectable()
 export class DashboardService {
   private readonly baseUrl = 'https://fleet-api.prd.na.vn.cloud.tesla.com';
+  private readonly proxyUrl = 'https://localhost:4443';
+  private caCert: Buffer = fs.readFileSync('./tls-cert.pem');
+
   constructor() {}
 
     async getVins(req: any) {
@@ -34,18 +39,22 @@ export class DashboardService {
   }
 
   async getVehicle(req: any) {
-    const url = `${this.baseUrl}/api/1/vehicles/${req.query.id}/vehicle_data?endpoints=vehicle_state`;
-    const access_token = req.query.access_token;
+    const url : string = `${this.proxyUrl}/api/1/vehicles/${req.query.id}/vehicle_data?endpoints=vehicle_state`;
+    const access_token : string = req.query.access_token;
     
     try {
-      const options = {
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${access_token}`,
-        },
+      const headers =  { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`,
       };
-  
-      const response = await axios.get(url, options);
+      console.log("cert: ", this.caCert);
+      
+      const response = await axios.get(url, {
+        headers: headers,
+        httpsAgent: new https.Agent({
+          ca: this.caCert
+        })
+      });
       const item = response.data.response;
       const data = {
         id: item.id,
@@ -60,75 +69,52 @@ export class DashboardService {
   }
 
   async setLock(req: any) {
-    const url = `${this.baseUrl}/api/1/vehicles/${req.query.vin}/command/door_lock`;
-    const access_token = req.query.access_token;
+    const url : string = `${this.proxyUrl}/api/1/vehicles/${req.query.vin}/command/door_lock`;
+    const access_token : string = req.query.access_token;
     
     try {
-      const options = {
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${access_token}`,
-        },
+      const headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`,
       };
-  
-      const response = await axios.post(url, null, options);
+
+      const data : object = {};
+      console.log("cert: ", this.caCert);
+      const response = await axios.post(url, data, {
+        headers: headers,
+        httpsAgent: new https.Agent({
+          ca: this.caCert
+        })
+      });
       console.log(response.data);
       return response.data.response;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-
-    // const api_key = this.configService.get('TRELLO_API_KEY');
-    // if (!req.query.ids) {
-    //   return;
-    // }
-    // const data : any = [];
-    // for (let item of req.query.ids) {
-    //     const url = `https://api.trello.com/1/lists/${item.id}/cards?key=${api_key}&token=${req.query.access_token}`
-    //     const response = await fetch(url);
-    //     const json = await response.json();
-    //     const temp = {
-    //       list_id: item.id,
-    //       list_name: item.name,
-    //       card: json
-    //     }
-    //     data.push(temp);
-    // }
-    // return data;
   }
 
   async setUnlock(req: any) {
-    const url = `${this.baseUrl}/api/1/vehicles/${req.query.vin}/command/door_unlock`;
-    const access_token = req.query.access_token;
+    const url : string = `${this.proxyUrl}/api/1/vehicles/${req.query.vin}/command/door_unlock`;
+    const access_token : string = req.query.access_token;
     
     try {
-      const options = {
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${access_token}`,
-        },
+      const headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${access_token}`,
       };
-  
-      const response = await axios.post(url, null, options);
+
+      const data : object = {};
+      console.log("cert: ", this.caCert);
+      const response = await axios.post(url, data, {
+        headers: headers,
+        httpsAgent: new https.Agent({
+          ca: this.caCert
+        })
+      });
       console.log(response.data);
       return response.data.response;
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-
-  //   const {boardID} = req.params;
-  //   const url =`https://api.trello.com/1/boards/${boardID}/lists`;
-  //   const api_key = this.configService.get('TRELLO_API_KEY');
-  //   const params = {
-  //     key: api_key,
-  //     token: req.query.access_token
-  //   };
-
-  //   const response = await this.httpService.axiosRef.get(url, {
-  //     params
-  //   });
-  //   const json = response.data;
-  //   console.log(json);
-  //   return json;
   }
 }
