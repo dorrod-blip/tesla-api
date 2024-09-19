@@ -2,14 +2,18 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as https from 'https';
+import * as path from 'path';
 
 @Injectable()
 export class DashboardService {
   private readonly baseUrl = 'https://fleet-api.prd.na.vn.cloud.tesla.com';
   private readonly proxyUrl = 'https://localhost:4443';
-  private caCert: Buffer = fs.readFileSync('./tls-cert.pem');
+  private caCert: Buffer;
 
-  constructor() {}
+  constructor() {
+    const certPath = path.join(__dirname, '..', '..', 'tls-cert.pem');
+    this.caCert = fs.readFileSync(certPath);
+  }
 
     async getVins(req: any) {
       const access_token = req.query.access_token;
