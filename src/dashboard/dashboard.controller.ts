@@ -48,4 +48,14 @@ export class DashboardController {
       return error;
     }
   }
+  @Get('createTelemetry')
+  async createTelemetry(@Req() req) {
+    try {
+      const data: any = await this.dashboardService.createTelemetry(req);
+      return data;
+    } catch (error) {
+      console.log("create telemetry error: ", error);
+      return error;
+    }
+  }
 }
