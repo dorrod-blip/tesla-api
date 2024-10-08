@@ -168,10 +168,10 @@ vGp4z7h/jnZymQyd/teRCBaho1+V
           exp: 1750000000,
           fields: {
             Location: {
-              interval_seconds: 50,
+              interval_seconds: 500,
             },
-            Soc: {
-              interval_seconds: 30,
+            ChargeState: {
+              interval_seconds: 500,
             },
           },
           ca: `${this.ca}`,
