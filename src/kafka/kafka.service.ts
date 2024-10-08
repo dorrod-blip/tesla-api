@@ -8,7 +8,7 @@ import { TelemetryData } from './kafka.entity'; // Import your entity
 export class KafkaConsumerService implements OnModuleInit {
   private kafka = new Kafka({
     clientId: 'telemetry-service',
-    brokers: ['kafka:9092'], // Update with your broker address
+    brokers: ['localhost:9093'], // Update with your broker address
   });
   private consumer = this.kafka.consumer({ groupId: 'telemetry' });
 
@@ -18,13 +18,22 @@ export class KafkaConsumerService implements OnModuleInit {
   ) {}
 
   async onModuleInit() {
+    console.log('onModuleInit');
     await this.consumer.connect();
     await this.consumer.subscribe({ topic: 'telemetry_V', fromBeginning: true });
 
     await this.consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
-        const data = JSON.parse(message.value.toString()); // Parse your message
-        console.log("telemetry live data: ", data);
+        try {
+          const binaryData = message.value;
+          const jsonData = JSON.parse(binaryData.toString('utf-8'));
+          console.log("telemetry live data: ", jsonData);
+        } catch (error) {
+          console.error(`Error processing message: ${error.message}`);
+          console.error(`Raw message: ${message.value.toString()}`);
+        }
+        // const data = JSON.parse(message.value.toString()); // Parse your message
+        // console.log("telemetry live data: ", data);
         // await this.saveData(data);
       },
     });

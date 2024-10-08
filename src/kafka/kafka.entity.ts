@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('telemetry_data') // Name of the table in MySQL
+@Entity() // Name of the table in MySQL
 export class TelemetryData {
   @PrimaryGeneratedColumn() // Auto-incrementing primary key
   id: number;
